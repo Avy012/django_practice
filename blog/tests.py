@@ -50,3 +50,33 @@ class TestView(TestCase):
         self.assertIn(post_001.title, main_area.text)
         # 3.4 "No Posts Yet" doesn't show anymore
         self.assertNotIn('No Posts Yet', main_area.text)
+
+    def test_post_detail(self):
+        # 1.1 There is one post
+        post_001 = Post.objects.create(
+            title='first post',
+            content='Hello World!!!'
+        )
+        # 1.2 The post's url is '/blog/1'
+        self.assertEqual(post_001.get_absolute_url(), '/blog/1/')
+
+        # 2. Detail Page test of post 1
+        # 2.1 first post's url works fine (status code: 200)
+        response = self.client.get(post_001.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        # 2.2 has same nav bar as post list page
+        navbar = soup.nav
+        self.assertIn('Blog', navbar.text)
+        self.assertIn('About', navbar.text)
+
+        # 2.3 first post's title is in web browswer title
+        self.assertIn(post_001.title, soup.title.text)
+        # 2.4 first post's title is in post area
+        main_area = soup.find('div', id="main-area")
+        post_area = main_area.find('div', id="post-area")
+        self.assertIn(post_001.title, post_area.text)
+        # 2.5 first post.s author is in post area
+        # 2.6 first post's content is in post area
+        self.assertIn(post_001.content, post_area.text)
