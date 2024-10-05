@@ -47,7 +47,7 @@ class TestView(TestCase):
         # 3.3 main area has titles of 2 posts
         main_area = soup.find('div', id='main-area')
         self.assertIn(post_001.title, main_area.text)
-        self.assertIn(post_001.title, main_area.text)
+        self.assertIn(post_002.title, main_area.text)
         # 3.4 "No Posts Yet" doesn't show anymore
         self.assertNotIn('No Posts Yet', main_area.text)
 
@@ -74,8 +74,8 @@ class TestView(TestCase):
         # 2.3 first post's title is in web browswer title
         self.assertIn(post_001.title, soup.title.text)
         # 2.4 first post's title is in post area
-        main_area = soup.find('div', id="main-area")
-        post_area = main_area.find('div', id="post-area")
+        main_area = soup.find('div', id='main-area')
+        post_area = main_area.find('div', id='post-area')
         self.assertIn(post_001.title, post_area.text)
         # 2.5 first post.s author is in post area
         # 2.6 first post's content is in post area
